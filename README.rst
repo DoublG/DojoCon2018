@@ -41,12 +41,12 @@ Authorisation
 All url's are protected by a simple API key. For every call you need to
 supply this key, you have multiple possibilities.
 
-============ ===================
-Name         Description
-============ ===================
-*api_key*    GET HTTP attribute
-*X-API-Key*  HTTP Header
-*X-API-KEY*  Cookie name
-============ ===================
+============= ==================
+Name          Description
+============= ==================
+*api_key*     GET HTTP attribute
+*X-API-Key*   HTTP Header
+*X-API-KEY*   Cookie name
+============= ==================
 
 

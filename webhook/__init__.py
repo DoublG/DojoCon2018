@@ -6,7 +6,7 @@ rabbit = RabbitMQ()
 
 
 def create_app(test_config=None, instance_relative_config=True):
-    app = Flask(__name__)
+    app = Flask(__name__, instance_relative_config=instance_relative_config)
 
     if test_config is None:
         app.config.from_object('webhook.default_settings')

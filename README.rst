@@ -53,7 +53,6 @@ Request format
 --------------
 /<routing_key>/geo
 ------------------
-::
 {
   "homeMobileCountryCode": 206,
   "homeMobileNetworkCode": 1,
@@ -80,3 +79,5 @@ Request format
     }
   ]
 }
+/<routing_key>/street
+---------------------

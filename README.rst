@@ -53,37 +53,38 @@ Request format
 --------------
 /<routing_key>/geo
 ------------------
-Example geo request
-```
-{
-  "homeMobileCountryCode": 206,
-  "homeMobileNetworkCode": 1,
-  "considerIp": false,
-  "carrier": "Proximus",
-  "cellTowers": [
-    {
-      "cellId": 66674698,
-      "locationAreaCode": 3024,
-      "mobileCountryCode": 206,
-      "mobileNetworkCode": 1
-    },
-    {
-      "cellId": 46190596,
-      "locationAreaCode": 3052,
-      "mobileCountryCode": 206,
-      "mobileNetworkCode": 1
-    },
-    {
-      "cellId": 21409538,
-      "locationAreaCode": 3052,
-      "mobileCountryCode": 206,
-      "mobileNetworkCode": 1
-    }
-  ]
-}
-```
-/<routing_key>/street::
----------------------
-Example street request::
+**Example geo request:** ::
 
-{'long': 4.8367074, 'lat': 51.321642499999996 }
+	{
+	  "homeMobileCountryCode": 206,
+	  "homeMobileNetworkCode": 1,
+	  "considerIp": false,
+	  "carrier": "Proximus",
+	  "cellTowers": [
+		{
+		  "cellId": 66674698,
+		  "locationAreaCode": 3024,
+		  "mobileCountryCode": 206,
+		  "mobileNetworkCode": 1
+		},
+		{
+		  "cellId": 46190596,
+		  "locationAreaCode": 3052,
+		  "mobileCountryCode": 206,
+		  "mobileNetworkCode": 1
+		},
+		{
+		  "cellId": 21409538,
+		  "locationAreaCode": 3052,
+		  "mobileCountryCode": 206,
+		  "mobileNetworkCode": 1
+		}
+	  ]
+	}
+
+
+/<routing_key>/street
+---------------------
+**Example street request:** ::
+
+	{'long': 4.8367074, 'lat': 51.321642499999996 }

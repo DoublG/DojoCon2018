@@ -52,30 +52,30 @@ Name          Location
 Request format
 --------------
 /<routing_key>/geo
-------------------
-|{
-|  "homeMobileCountryCode": 206,
-|  "homeMobileNetworkCode": 1,
-|  "considerIp": false,
-|  "carrier": "Proximus",
-|  "cellTowers": [
-|    {
-|      "cellId": 66674698,
-|      "locationAreaCode": 3024,
-|      "mobileCountryCode": 206,
-|      "mobileNetworkCode": 1
-|    },
-|    {
-|      "cellId": 46190596,
-|      "locationAreaCode": 3052,
-|      "mobileCountryCode": 206,
-|      "mobileNetworkCode": 1
-|    },
-|    {
-|      "cellId": 21409538,
-|      "locationAreaCode": 3052,
-|      "mobileCountryCode": 206,
-|      "mobileNetworkCode": 1
-|    }
-|  ]
-|}
+------------------::
+{
+  "homeMobileCountryCode": 206,
+  "homeMobileNetworkCode": 1,
+  "considerIp": false,
+  "carrier": "Proximus",
+  "cellTowers": [
+    {
+      "cellId": 66674698,
+      "locationAreaCode": 3024,
+      "mobileCountryCode": 206,
+      "mobileNetworkCode": 1
+    },
+    {
+      "cellId": 46190596,
+      "locationAreaCode": 3052,
+      "mobileCountryCode": 206,
+      "mobileNetworkCode": 1
+    },
+    {
+      "cellId": 21409538,
+      "locationAreaCode": 3052,
+      "mobileCountryCode": 206,
+      "mobileNetworkCode": 1
+    }
+  ]
+}

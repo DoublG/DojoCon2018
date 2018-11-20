@@ -51,8 +51,9 @@ Name          Location
 
 Request format
 --------------
-/<routing_key>/geo::
+/<routing_key>/geo
 ------------------
+Example geo request::
 
 {
   "homeMobileCountryCode": 206,
@@ -83,5 +84,6 @@ Request format
 
 /<routing_key>/street::
 ---------------------
+Example street request::
 
 {'long': 4.8367074, 'lat': 51.321642499999996 }

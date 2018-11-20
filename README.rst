@@ -1,12 +1,12 @@
 Webhook
 =======
-The webhook application was build for the *EnviromentalSensor* project.
+The webhook application was build for the *EnviromentalSensor* project, presented on DojoCon2018 (Belgium).
 I acts as an entrypoint to a internal RabbitMQ server.
 
 
 Configuration
 -------------
-Configuration is provided via a configuration file supplied
+Configuration is loaded via a configuration file supplied
 via the APP_SETTINGS environment variable.
 
 =========================== =========================================
@@ -24,7 +24,7 @@ Configuration name          Description
 URL's
 -----
 All url's use the POST method. The method only returns a success message.
-The "real" response is published under RabbitMQ under the *RABBITMQ_EXCHANGE*
+The "real" response is published under *RABBITMQ_EXCHANGE*
 with routing key *<routing_key>*.
 
 =========================== ==========================================
@@ -38,8 +38,8 @@ Configuration name          Description
 
 Authorisation
 -------------
-All url's are protected by a simple API key. For every call you need to
-supply this key, you have multiple possibilities.
+All url's are protected by a simple API key, for every call you need to
+supply this key. 
 
 ============= ==================
 Name          Description

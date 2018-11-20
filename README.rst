@@ -54,8 +54,7 @@ Request format
 /<routing_key>/geo
 ------------------
 Example geo request
-
-.. codeblock:: json
+```
 {
   "homeMobileCountryCode": 206,
   "homeMobileNetworkCode": 1,
@@ -82,7 +81,7 @@ Example geo request
     }
   ]
 }
-
+```
 /<routing_key>/street::
 ---------------------
 Example street request::

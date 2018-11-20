@@ -86,4 +86,4 @@ Example geo request::
 ---------------------
 Example street request::
 
-|{'long': 4.8367074, 'lat': 51.321642499999996 }
+ | {'long': 4.8367074, 'lat': 51.321642499999996 }

@@ -52,7 +52,8 @@ Name          Location
 Request format
 --------------
 /<routing_key>/geo
-------------------::
+------------------
+::
 {
   "homeMobileCountryCode": 206,
   "homeMobileNetworkCode": 1,

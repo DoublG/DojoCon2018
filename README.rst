@@ -42,7 +42,7 @@ All url's are protected by a simple API key, for every call you need to
 supply this key. 
 
 ============= ==================
-Name          Description
+Name          Location
 ============= ==================
 *api_key*     GET HTTP attribute
 *X-API-Key*   HTTP Header

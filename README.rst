@@ -52,7 +52,8 @@ Name          Location
 Request format
 --------------
 /<routing_key>/geo
-------------------
+------------------::
+
 {
   "homeMobileCountryCode": 206,
   "homeMobileNetworkCode": 1,
@@ -79,5 +80,8 @@ Request format
     }
   ]
 }
+
 /<routing_key>/street
----------------------
+---------------------::
+
+{'long': 4.8367074, 'lat': 51.321642499999996 }

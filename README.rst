@@ -55,11 +55,11 @@ Request format
 ------------------
 Example geo request::
 
-{
-  "homeMobileCountryCode": 206,
-  "homeMobileNetworkCode": 1,
-  "considerIp": false,
-  "carrier": "Proximus",
+|{
+|  "homeMobileCountryCode": 206,
+|  "homeMobileNetworkCode": 1,
+|  "considerIp": false,
+|  "carrier": "Proximus",
   "cellTowers": [
     {
       "cellId": 66674698,

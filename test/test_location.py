@@ -48,6 +48,7 @@ class TestCellTowerLocation(unittest.TestCase):
         with app.test_client() as client:
             rabbit_mock.channel.basic_publish.return_value = True
             request_mock.post.return_value.json.return_value = expected_location
+            request_mock.post.return_value.status_code = 200
 
             rv = client.post('/demo/geo?api_key={}'.format(app.config['API_KEY']),
                              data=json.dumps(requested_location),

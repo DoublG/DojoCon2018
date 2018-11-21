@@ -44,7 +44,7 @@ def build_application(c):
         c.run('ln -s /etc/uwsgi/apps-available/template.ini /etc/uwsgi/vassals/{}.ini'.format(application_folder))
 
         # update the ngix configuration
-
+        c.put('dist/{}'.format(filename), '/tmp/{}'.format(filename))
 
 @task
 def cleanup_application(c):
@@ -54,13 +54,13 @@ def cleanup_application(c):
     # delete symlink
     c.run('unlink /etc/uwsgi/vassals/{}.ini'.format(application_folder))
 
+    # wait until application is shut down by the emperor
     time.sleep(5)
 
     # delete folders
     c.run('rm -r /var/www/{}'.format(application_folder))
 
     # delete users
-
     username = 'www-{}'.format(application_folder)
     c.run('userdel {}'.format(username))
 

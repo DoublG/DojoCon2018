@@ -93,8 +93,7 @@ Server config files
 -------------------
 Backend server configuration
 ----------------------------
-/etc/ngix/ngix.conf
-------------------- ::
+**/etc/ngix/ngix.conf** ::
 
     user www-data;
     worker_processes auto;
@@ -127,8 +126,7 @@ Backend server configuration
             include /etc/nginx/sites-enabled/*;
     }
 
-/etc/nginx/sites-enabled/applications
-------------------------------------- ::
+**/etc/nginx/sites-enabled/applications** ::
 
     server {
       listen 5051 ssl default_server;
@@ -143,16 +141,14 @@ Backend server configuration
       include /etc/nginx/applications-enabled/*;
     }
 
-/etc/nginx/applications-enabled/webhook
-------------------------------------- ::
+**/etc/nginx/applications-enabled/webhook** ::
 
     location /webhook/ {
       include /var/www/webhook/uwsgi_params;
       rewrite ^/webhook/(.*)$ /$1 break;
       uwsgi_pass unix:/var/www/webhook/webhook.socket;
     }
-/etc/default/uwsgi
------------------- ::
+**/etc/default/uwsgi** ::
 
     RUN_AT_STARTUP=yes
     VERBOSE=yes
@@ -160,8 +156,7 @@ Backend server configuration
     INHERITED_CONFIG=/etc/uwsgi/config.ini
 
 
-/etc/uwsgi/config.ini
------------------- ::
+**/etc/uwsgi/config.ini** ::
 
     [uwsgi]
     autoload = true
@@ -173,14 +168,12 @@ Backend server configuration
     chmod-socket = 660
     log-date = true
 
-/etc/uwsgi/apps-available/emperor.ini
-------------------------------------- ::
+**/etc/uwsgi/apps-available/emperor.ini** ::
 
     [uwsgi]
     emperor = /etc/uwsgi/vassals/*.ini
     emperor-use-clone = fs,ipc,pid,uts
-/etc/uwsgi/apps-available/template.ini
-------------------------------------- ::
+**/etc/uwsgi/apps-available/template.ini** ::
 
     [uwsgi]
     socket = /var/www/%n/%n.socket

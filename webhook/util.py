@@ -41,7 +41,6 @@ class ApiLogin(object):
 
 class RabbitMQ(object):
     def __init__(self, app=None):
-        self.app = app
         if app is not None:
             self.init_app(app)
 
@@ -66,6 +65,7 @@ class RabbitMQ(object):
         return channel
 
     def init_app(self, app):
+        self.app = app
 
         @app.teardown_appcontext
         def teardown_connection(exception):

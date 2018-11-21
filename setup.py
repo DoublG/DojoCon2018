@@ -5,8 +5,9 @@ setup(
     author='Erik Woidt',
     author_email='erik@woidt.be',
     packages=find_packages(exclude='test'),
-    name='Webhooks',
+    name='Webhook',
     install_requires=['Flask', 'Flask-Login', 'pika', 'requests', 'jsonschema'],
     tests_require=['blinker'],
+    include_package_data=True,
     url=''
 )

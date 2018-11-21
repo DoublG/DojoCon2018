@@ -31,4 +31,4 @@ instance/
 
 .idea/
 
-config.cfg
+config/

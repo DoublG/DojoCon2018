@@ -72,8 +72,9 @@ def handle_hook(routing_key):
 
     content = request.get_json(force=True)
 
+    result = False
     if content is not None:
         result = rabbit.channel.basic_publish(exchange=current_app.config['RABBITMQ_EXCHANGE'],
-                                              routing_key=routing_key, body=content)
+                                              routing_key=routing_key, body=str(content))
 
     return jsonify(success=result)

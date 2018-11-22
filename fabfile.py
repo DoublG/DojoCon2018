@@ -1,16 +1,54 @@
 from fabric import task
 import time
 
+@task
+def check_installation(c):
+    """ Check if the prerequisites are ok.
+        Is the correct software installed & are the required files & folders where they need to be ?
+    """
+
+    # quick check of the server has the correct software
+    for package in ('nginx', 'uwsgi'):
+        package_found = \
+            c.run("dpkg-query -f '${Package}###${Version}\n' -W " + package, warn=True).stdout.strip().split('###')
+
+        if package_found[0] == package:
+            print('{} - {} installed'.format(*package_found))
+        else:
+            print('package {} is missing'.format(package))
+
+    # are the custom folders created ?
+    for folder in ('/etc/nginx/applications-available',
+                   '/etc/nginx/applications-enabled',
+                   '/etc/uwsgi/vassals'):
+
+        if c.run('if [ -d "{}" ]; then echo 1; else echo 0; fi'
+                         .format(folder)).stdout.strip() == '1':
+            print('folder {} ok'.format(folder))
+        else:
+            print('folder {} not found'.format(folder))
+
+    # are the template files there ?
+    for file in ('/etc/nginx/applications-available/template',
+                 '/etc/uwsgi/apps-available/template.ini'):
+
+        if c.run('if [ "{}" ]; then echo 1; else echo 0; fi'.format(file)).stdout.strip() == '1':
+            print('file {} ok'.format(file))
+        else:
+            print('file {} not found'.format(file))
 
 @task
 def build_application(c):
+    """ Build the local package & deploy this to the server. """
+
     # create python package
     c.local('python setup.py sdist --formats=gztar')
 
     filename = '{}.tar.gz'.format(c.local('python setup.py --fullname').stdout.strip())
 
     application_folder = c.local('python setup.py --name').stdout.strip().lower()
-    usergroup = username = 'www-{}'.format(application_folder)
+    usergroup = \
+    username = 'www-{}'.format(application_folder)
 
     # upload package to server
     c.put('dist/{}'.format(filename), '/tmp/{}'.format(filename))
@@ -61,6 +99,8 @@ def build_application(c):
 
 @task
 def cleanup_application(c):
+    """ Delete the package from the server & remove the config files. """
+
     application_folder = c.local('python setup.py --name').stdout.strip().lower()
     username = 'www-{}'.format(application_folder)
 

@@ -93,14 +93,15 @@ Server config files
 -------------------
 Backend server configuration
 ----------------------------
-The configuration expects the following folders to be created.
-======================
+The configuration expects the following new folders to be created.
+=================================
 paths
 =================================
 /etc/nginx/applications-available
 /etc/nginx/applications-enabled
 /etc/uwsgi/vassals
 =================================
+
 
 **/etc/ngix/ngix.conf** ::
 

@@ -187,6 +187,13 @@ Backend server configuration
     uid=www-%n
     guid=www-%n
 
+**/etc/nginx/applications-available/template** ::
+
+    location /%n/ {
+      include /var/www/%n/uwsgi_params;
+      rewrite ^/webhook/(.*)$ /$1 break;
+      uwsgi_pass unix:/var/www/%n/%n.socket;
+    }
 Deployment
 ----------
 **cleanup of the previous setup** ::

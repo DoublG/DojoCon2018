@@ -94,6 +94,7 @@ Server config files
 Backend server configuration
 ----------------------------
 The configuration expects the following new folders to be created.
+
 =================================
 paths
 =================================

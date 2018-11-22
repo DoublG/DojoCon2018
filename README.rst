@@ -198,7 +198,7 @@ Deployment
 ----------
 **cleanup of the previous setup** ::
 
-    fab -H root@100.100.0.2 build-application
+    fab -H root@100.100.0.2 cleanup-application
 
 **update / install new application** ::
 

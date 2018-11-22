@@ -189,11 +189,11 @@ Backend server configuration
 
 Deployment
 ----------
-** cleanup of the previous setup ** ::
+**cleanup of the previous setup** ::
 
     fab -H root@100.100.0.2 build-application
 
-** update / install new application ** ::
+**update / install new application** ::
 
     fab -H root@100.100.0.2 build-application
 

@@ -71,7 +71,6 @@ def build_application(c):
 
         # upload the config files
         c.put('config/config.cfg', '/var/www/{}'.format(application_folder))
-        c.put('config/uwsgi_params', '/var/www/{}'.format(application_folder))
 
         # update the uwsgi configuration (symlink based on template.ini)
         c.run('ln -s /etc/uwsgi/apps-available/template.ini /etc/uwsgi/vassals/{}.ini'.format(application_folder))

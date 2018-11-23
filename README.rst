@@ -1,13 +1,21 @@
+=======
 Webhook
 =======
 The webhook application was build for the *EnviromentalSensor* project, presented on DojoCon2018 (Belgium).
-I acts as an entrypoint to a internal RabbitMQ server.
+I acts as an entrypoint to internal RabbitMQ servers, it is used to communicate between
+Electron devices via the Particle Cloud and an internal Node-Red server with a dashboard.
 
+.. image:: overview.jpg
+   :alt: Global overview
+   :align: center
 
+-------------
 Configuration
 -------------
 Configuration is loaded via a configuration file supplied
-via the APP_SETTINGS environment variable.
+via the *APP_SETTINGS* environment variable.
+
+Mandatory values in the config file.
 
 =========================== =========================================
 Configuration name          Description
@@ -22,9 +30,9 @@ Configuration name          Description
 =========================== =========================================
 
 URL's
------
-All url's use the POST method. The method only returns a success message.
-The "real" response is published under *RABBITMQ_EXCHANGE*
+=====
+All url's use the POST method, the methods only return a success message,
+the "real" response is published under *RABBITMQ_EXCHANGE*
 with routing key *<routing_key>*.
 
 =========================== ==========================================
@@ -35,65 +43,13 @@ Configuration name          Description
 */<routing_key>*            Publish JSON to RabbitMQ exchange
 =========================== ==========================================
 
-
-Authorisation
--------------
-All url's are protected by a simple API key, for every call you need to
-supply this key. 
-
-============= ==================
-Name          Location
-============= ==================
-*api_key*     GET HTTP attribute
-*X-API-Key*   HTTP Header
-*X-API-KEY*   Cookie name
-============= ==================
-
-Request format
---------------
-/<routing_key>/geo
-------------------
-**Example geo request:** ::
-
-	{
-	  "homeMobileCountryCode": 206,
-	  "homeMobileNetworkCode": 1,
-	  "considerIp": false,
-	  "carrier": "Proximus",
-	  "cellTowers": [
-		{
-		  "cellId": 66674698,
-		  "locationAreaCode": 3024,
-		  "mobileCountryCode": 206,
-		  "mobileNetworkCode": 1
-		},
-		{
-		  "cellId": 46190596,
-		  "locationAreaCode": 3052,
-		  "mobileCountryCode": 206,
-		  "mobileNetworkCode": 1
-		},
-		{
-		  "cellId": 21409538,
-		  "locationAreaCode": 3052,
-		  "mobileCountryCode": 206,
-		  "mobileNetworkCode": 1
-		}
-	  ]
-	}
-
-
-/<routing_key>/street
----------------------
-**Example street request:** ::
-
-	{'long': 4.8367074, 'lat': 51.321642499999996 }
-
 Server config files
--------------------
-Backend server configuration
+===================
+Backend Server configuration
 ----------------------------
-The configuration expects the following new folders to be created.
+
+The configuration expects the following folders to be created,
+these have to be created afterwards.
 
 +----------------------------------+
 |paths                             |
@@ -105,8 +61,9 @@ The configuration expects the following new folders to be created.
 |/etc/uwsgi/vassals                |
 +----------------------------------+
 
-
-**/etc/ngix/ngix.conf** ::
+NGINX
+`````
+**/etc/nginx/nginx.conf** ::
 
     user www-data;
     worker_processes auto;
@@ -156,11 +113,23 @@ The configuration expects the following new folders to be created.
 
 **/etc/nginx/applications-enabled/webhook** ::
 
-    location /webhook/ {
-      include /var/www/webhook/uwsgi_params;
-      rewrite ^/webhook/(.*)$ /$1 break;
-      uwsgi_pass unix:/var/www/webhook/webhook.socket;
+    location /%n/ {
+      include /etc/nginx/uwsgi_params;
+      rewrite ^/%n/(.*)$ /$1 break;
+      uwsgi_pass unix:/var/www/%n/%n.socket;
     }
+
+**/etc/nginx/applications-available/template** ::
+
+    location /%n/ {
+      include /etc/nginx/uwsgi_params;
+      rewrite ^/webhook/(.*)$ /$1 break;
+      uwsgi_pass unix:/var/www/%n/%n.socket;
+    }
+
+
+UWSGI
+`````
 **/etc/default/uwsgi** ::
 
     RUN_AT_STARTUP=yes
@@ -186,6 +155,7 @@ The configuration expects the following new folders to be created.
     [uwsgi]
     emperor = /etc/uwsgi/vassals/*.ini
     emperor-use-clone = fs,ipc,pid,uts
+
 **/etc/uwsgi/apps-available/template.ini** ::
 
     [uwsgi]
@@ -200,15 +170,85 @@ The configuration expects the following new folders to be created.
     uid=www-%n
     guid=www-%n
 
-**/etc/nginx/applications-available/template** ::
+RabbitMQ
+````````
+TODO
 
-    location /%n/ {
-      include /var/www/%n/uwsgi_params;
-      rewrite ^/webhook/(.*)$ /$1 break;
-      uwsgi_pass unix:/var/www/%n/%n.socket;
+Frontend Server configuration
+-----------------------------
+TODO
+
+-------------
+Authorisation
+-------------
+All url's are protected by a simple API key, for every call you need to
+supply this key, you can pick one of the supported methods.
+
+============= ==================
+Name          Location
+============= ==================
+*api_key*     GET HTTP attribute
+*X-API-Key*   HTTP Header
+*X-API-KEY*   Cookie name
+============= ==================
+
+-------------------------------
+SSL Termination & Re-encryption
+-------------------------------
+TODO
+
+----------------
+Request examples
+----------------
+
+POST: /<routing_key>/geo
+========================
+**Example geo request:** ::
+
+    {
+      "homeMobileCountryCode": 206,
+      "homeMobileNetworkCode": 1,
+      "considerIp": false,
+      "carrier": "Proximus",
+      "cellTowers": [
+        {
+          "cellId": 66674698,
+          "locationAreaCode": 3024,
+          "mobileCountryCode": 206,
+          "mobileNetworkCode": 1
+        },
+        {
+          "cellId": 46190596,
+          "locationAreaCode": 3052,
+          "mobileCountryCode": 206,
+          "mobileNetworkCode": 1
+        },
+        {
+          "cellId": 21409538,
+          "locationAreaCode": 3052,
+          "mobileCountryCode": 206,
+          "mobileNetworkCode": 1
+        }
+      ]
     }
+
+POST: /<routing_key>/street
+============================
+**Example street request:** ::
+
+    {'long': 4.8367074, 'lat': 51.321642499999996 }
+
+POST: /<routing_key>
+====================
+**Example normal request:** ::
+
+  Any valid json is allowed
+
+----------
 Deployment
 ----------
+I'm using fabric for the deployment, in the examples 100.100.0.2 (rabbitmq) is the backend server and 100.100.0.1 is the frontend server.
+
 **cleanup of the previous setup** ::
 
     fab -H root@100.100.0.2 cleanup-application
@@ -216,4 +256,8 @@ Deployment
 **update / install new application** ::
 
     fab -H root@100.100.0.2 build-application
+
+**check installation** ::
+
+    fab -H root@100.100.0.2 check-installation
 

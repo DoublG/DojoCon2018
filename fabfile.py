@@ -76,7 +76,7 @@ def build_application(c):
         c.run('ln -s /etc/uwsgi/apps-available/template.ini /etc/uwsgi/vassals/{}.ini'.format(application_folder))
 
         # create the ngix config (use template to create new config)
-        c.run('sed -e s/%n/{0}/ /etc/nginx/applications-available/template > /etc/nginx/applications-available/{0}'
+        c.run('sed -e s/%n/{0}/g /etc/nginx/applications-available/template > /etc/nginx/applications-available/{0}'
               .format(application_folder))
 
         # link the config

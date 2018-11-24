@@ -111,19 +111,11 @@ NGINX
       include /etc/nginx/applications-enabled/*;
     }
 
-**/etc/nginx/applications-enabled/webhook** ::
-
-    location /%n/ {
-      include /etc/nginx/uwsgi_params;
-      rewrite ^/%n/(.*)$ /$1 break;
-      uwsgi_pass unix:/var/www/%n/%n.socket;
-    }
-
 **/etc/nginx/applications-available/template** ::
 
     location /%n/ {
       include /etc/nginx/uwsgi_params;
-      rewrite ^/webhook/(.*)$ /$1 break;
+      rewrite ^/%n/(.*)$ /$1 break;
       uwsgi_pass unix:/var/www/%n/%n.socket;
     }
 
@@ -176,7 +168,129 @@ TODO
 
 Frontend Server configuration
 -----------------------------
-TODO
+The configuration expects the following folders to be created,
+these have to be created afterwards.
+
++----------------------------------+
+|paths                             |
++==================================+
+|/etc/nginx/stream-available       |
++----------------------------------+
+|/etc/nginx/stream-enabled         |
++----------------------------------+
+NGINX
+`````
+**/etc/nginx/stream-enabled/rabbitmq-amqp** ::
+
+    server {
+      listen 6666 ssl;
+
+      proxy_ssl on;
+      proxy_ssl_trusted_certificate /etc/ssl/certs/remote_ca.crt;
+      proxy_ssl_verify on;
+      proxy_ssl_session_reuse on;
+
+
+      ssl_certificate     /etc/letsencrypt/live/****.be/fullchain.pem;
+      ssl_certificate_key /etc/letsencrypt/live/****.be/privkey.pem;
+      ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+      ssl_ciphers         HIGH:!aNULL:!MD5;
+
+      proxy_pass rabbitmq:5671;
+    }
+
+
+**/etc/nginx/stream-enabled/rabbitmq-mqtt** ::
+
+    server {
+      listen 7777 ssl;
+
+      proxy_ssl_verify on;
+      proxy_ssl on;
+      proxy_ssl_trusted_certificate /etc/ssl/certs/remote_ca.crt;
+      proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+      proxy_ssl_ciphers HIGH:!aNULL:!MD5;
+
+      ssl_certificate     /etc/letsencrypt/live/****.be/fullchain.pem;
+      ssl_certificate_key /etc/letsencrypt/live/****.be/privkey.pem;
+      ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+      ssl_ciphers         HIGH:!aNULL:!MD5;
+
+      proxy_pass rabbitmq:8883;
+    }
+
+**/etc/nginx/sites-enabled/main** ::
+
+    server {
+        listen 5051 ssl;
+        listen [::]:5051 ssl;
+
+        server_name ****.be;
+
+        ssl_certificate     /etc/letsencrypt/live/****.be/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/****.be/privkey.pem;
+        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+        ssl_ciphers         HIGH:!aNULL:!MD5;
+
+        root /var/www/html;
+
+        location / {
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+            proxy_redirect off;
+            proxy_ssl_trusted_certificate /etc/ssl/certs/remote_ca.crt;
+            proxy_pass https://rabbitmq:5051;
+            proxy_ssl_verify on;
+            proxy_intercept_errors on;
+            error_page 404 401 =444 /;
+        }
+    }
+
+    server {
+        listen 80;
+        server_name ****.be;
+        root /var/www/html;
+    }
+
+**/etc/nginx/nginx.conf** ::
+
+    user www-data;
+    worker_processes auto;
+    pid /run/nginx.pid;
+
+    events {
+            worker_connections 768;
+    }
+
+    http {
+
+            sendfile on;
+            tcp_nopush on;
+            tcp_nodelay on;
+            keepalive_timeout 65;
+            types_hash_max_size 2048;
+
+            include /etc/nginx/mime.types;
+            default_type application/octet-stream;
+
+            ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # Dropping SSLv3, ref: POODLE
+            ssl_prefer_server_ciphers on;
+
+            access_log /var/log/nginx/access.log;
+            error_log /var/log/nginx/error.log;
+
+            gzip on;
+            gzip_disable "msie6";
+
+            include /etc/nginx/conf.d/*.conf;
+            include /etc/nginx/sites-enabled/*;
+    }
+
+
+    stream{
+      include /etc/nginx/stream-enabled/*;
+    }
+
 
 -------------
 Authorisation
@@ -195,7 +309,10 @@ Name          Location
 -------------------------------
 SSL Termination & Re-encryption
 -------------------------------
-TODO
+EasyEncypt
+============
+* Create CA
+* Create server key
 
 ----------------
 Request examples
